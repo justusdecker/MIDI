@@ -1,5 +1,7 @@
 # MIDI
 
+<img src="https://www.hercules.com/wp-content/uploads/2022/12/DJControl_Inpulse300MK2_zoom1-5-1024x683.png" width="50%">
+
 ## The Hercules INPULSE 300 MK2 Mappings
 
 |KEY|VALUE|
@@ -118,3 +120,20 @@
 |0x97+116|PAD K6 RIGHT LED|
 |0x97+117|PAD K7 RIGHT LED|
 |0x97+118|PAD K8 RIGHT LED|
+
+# SysEx UnLock
+
+I tried multiple hours to send this via C.
+
+I tried:
+* OS restart
+* Hard-reset(Hercules)
+* Driver reinstall
+* touching grass
+No Response...
+
+So i will go (currently) the easy way and unluck this via `MIDI-OX`
+
+```
+F0 00 01 4E 01 F7
+```

@@ -6,6 +6,7 @@ UINT MIM = 0x3C3;
 
 
 void CALLBACK midiInProc(HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2) {
+    // We can retreive this data by scanning the contents of the commandline
     if (MIM == wMsg) {
         UINT status = dwParam1 & 0xFF;
         UINT data1 = (dwParam1 >> 8) & 0xFF;
@@ -16,9 +17,7 @@ void CALLBACK midiInProc(HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR dwInstance, DWORD
 };
 
 int getMidiValues() {
-
     UINT deviceID = 0;
-
     HMIDIIN hMidiIn;
     MMRESULT result;
 
@@ -33,12 +32,13 @@ int getMidiValues() {
         printf("An error occurred, (Code: %u)\n", result);
         return 1;
     }
-
+    
     midiInStart(hMidiIn);
     printf("Started MIDI-Receiver");
     
-    char input_char;
-    while (scanf(" %c", &input_char) && input_char != 'q');
+    while(1) { // we run until the task will be killed, from the python side.
+        
+    }
 
     midiInStop(hMidiIn);
     midiInClose(hMidiIn);
@@ -57,21 +57,23 @@ int setLED() {
         printf("An error occurred, (Code: %u)\n", result);
         return 1;
     }
-    for (int j = 0x90;j<0x98;j++) {
+
+    //for (int j = 0x90;j<0x98;j++) {
         for (int i = 0; i<128; i++) {
-            UCHAR status = j;
+            UCHAR status = 0x96;
             UCHAR note = i;
             UCHAR velocity = 127;
 
             DWORD messageOn = status | (note << 8) | (velocity << 16);
             midiOutShortMsg(hMidiOut, messageOn);
-            printf("%x %u\n",j,i);
-            Sleep(150);
+            printf("status=0x%x, note=%u\n",0x96,i);
+            //getchar();
+            Sleep(50);
             velocity = 0;
             DWORD messageOff = status | (note << 8) | (velocity << 16);
             midiOutShortMsg(hMidiOut, messageOff);
        }
-    }
+    //}
     midiOutClose(hMidiOut);
     
     
